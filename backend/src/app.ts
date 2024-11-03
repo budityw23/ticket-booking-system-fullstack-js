@@ -4,6 +4,12 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { connectDB } from './config/database';
 import { logger } from './config/logger';
+import { errorHandler } from './middlewares/error.middleware';
+import { validateEnv } from './utils/validateEnv';
+import routes from './routes';
+
+// Validate environment variables
+validateEnv();
 
 // Load environment variables
 require('dotenv').config();
@@ -20,18 +26,15 @@ app.use(cors({
 app.use(helmet());
 app.use(morgan('dev'));
 
-// Health Check Route
-app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'OK', timestamp: new Date() });
-});
+// Routes
+app.use('/api', routes);
 
-// Error handling middleware
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  logger.error(err.stack);
-  res.status(500).json({
-    error: 'Internal Server Error',
-    message: process.env.NODE_ENV === 'development' ? err.message : undefined
-  });
+// Error handling
+app.use(errorHandler);
+
+// Handle unhandled routes
+app.all('*', (req: Request, res: Response, next: NextFunction) => {
+  next(new Error(`Can't find ${req.originalUrl} on this server!`));
 });
 
 // Start server
@@ -40,13 +43,20 @@ const startServer = async () => {
   try {
     await connectDB();
     app.listen(PORT, () => {
-      logger.info(`Server running on port ${PORT}`);
+      logger.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
     });
   } catch (error) {
     logger.error('Failed to start server:', error);
     process.exit(1);
   }
 };
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err: Error) => {
+  logger.error('UNHANDLED REJECTION! 💥 Shutting down...');
+  logger.error(err.name, err.message);
+  process.exit(1);
+});
 
 startServer();
 
