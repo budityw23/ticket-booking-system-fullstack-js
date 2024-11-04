@@ -1,0 +1,36 @@
+{
+    "dependencies": {
+      "@emotion/react": "^11.x",
+      "@emotion/styled": "^11.x",
+      "@mui/material": "^5.x",
+      "@mui/icons-material": "^5.x",
+      "@types/node": "^16.x",
+      "@types/react": "^17.x",
+      "@types/react-dom": "^17.x",
+      "axios": "^0.24.x",
+      "react": "^17.x",
+      "react-dom": "^17.x",
+      "react-router-dom": "^6.x",
+      "react-query": "^3.x",
+      "typescript": "^4.x"
+    },
+    "devDependencies": {
+      "@typescript-eslint/eslint-plugin": "^5.x",
+      "@typescript-eslint/parser": "^5.x",
+      "eslint": "^8.x",
+      "eslint-config-prettier": "^8.x",
+      "eslint-plugin-prettier": "^4.x",
+      "eslint-plugin-react": "^7.x",
+      "prettier": "^2.x"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "lint": "eslint src --ext .ts,.tsx",
+        "lint:fix": "eslint src --ext .ts,.tsx --fix",
+        "format": "prettier --write \"src/**/*.{ts,tsx}\""
+    }
+  }
+  
