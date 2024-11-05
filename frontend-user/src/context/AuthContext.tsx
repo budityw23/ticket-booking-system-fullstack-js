@@ -28,7 +28,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         loading: false
       });
     } else {
-      setAuth(prev => ({ ...prev, loading: false }));
+      setAuth((prev) => ({ ...prev, loading: false }));
     }
   }, []);
 

@@ -1,10 +1,5 @@
 import React from 'react';
-import { 
-  Card, 
-  CardContent, 
-  Typography, 
-  Box 
-} from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 
 interface StatsCardProps {
   title: string;
@@ -21,13 +16,9 @@ export const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon }) => {
             <Typography color="textSecondary" gutterBottom>
               {title}
             </Typography>
-            <Typography variant="h4">
-              {value}
-            </Typography>
+            <Typography variant="h4">{value}</Typography>
           </Box>
-          <Box>
-            {icon}
-          </Box>
+          <Box>{icon}</Box>
         </Box>
       </CardContent>
     </Card>

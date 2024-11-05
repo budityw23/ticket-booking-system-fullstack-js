@@ -28,6 +28,12 @@ services:
     container_name: ticket-booking-backend
     ports:
       - "3000:3000"
+    volumes:
+      - ./backend/src:/usr/src/app/src
+      - ./backend/nodemon.json:/usr/src/app/nodemon.json
+      - ./backend/tsconfig.json:/usr/src/app/tsconfig.json
+      - /usr/src/app/node_modules
+      - ./backend/logs:/usr/src/app/logs
     environment:
       - NODE_ENV=development
       - MONGODB_URI=mongodb://mongodb:27017/ticket-booking
@@ -46,6 +52,9 @@ services:
     container_name: ticket-booking-frontend-user
     ports:
       - "80:80"
+    volumes:
+      - ./frontend-user:/usr/src/app
+      - /usr/src/app/node_modules
     depends_on:
       - backend
     networks:
@@ -58,6 +67,9 @@ services:
     container_name: ticket-booking-frontend-admin
     ports:
       - "81:80"
+    volumes:
+      - ./frontend-user:/usr/src/app
+      - /usr/src/app/node_modules
     depends_on:
       - backend
     networks:

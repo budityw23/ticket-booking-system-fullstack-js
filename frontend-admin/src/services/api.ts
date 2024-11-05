@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { AxiosResponse } from 'axios';
+import { DashboardStats } from '../types/admin';
 
 export const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000/api',
@@ -7,7 +9,8 @@ export const api = axios.create({
   }
 });
 
-// Request interceptor
+export type ApiResponse<T> = Promise<AxiosResponse<T>>;
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token && config.headers) {
@@ -16,13 +19,10 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-
-// Response interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
       localStorage.removeItem('token');
       window.location.href = '/login';
     }
@@ -30,14 +30,13 @@ api.interceptors.response.use(
   }
 );
 
-// API wrapper functions
 export const apiService = {
   // Auth
   login: (credentials: { email: string; password: string }) =>
-    api.post('/auth/login', credentials),
+    api.post<{ token: string }>('/auth/login', credentials),
 
   // Dashboard
-  getDashboardStats: () => api.get('/admin/stats'),
+  getDashboardStats: () => api.get<DashboardStats>('/admin/stats'),
 
   // Users
   getUsers: () => api.get('/admin/users'),
@@ -52,7 +51,8 @@ export const apiService = {
 
   // Bookings
   getBookings: () => api.get('/admin/bookings'),
-  updateBooking: (id: string, data: any) => api.put(`/admin/bookings/${id}`, data),
+  updateBooking: (id: string, data: any) =>
+    api.put(`/admin/bookings/${id}`, data),
   deleteBooking: (id: string) => api.delete(`/admin/bookings/${id}`)
 };
 

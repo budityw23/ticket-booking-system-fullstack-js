@@ -8,13 +8,16 @@ import {
 } from '@mui/icons-material';
 import { StatsCard } from '../../components/Dashboard/StatsCard';
 import { useQuery } from 'react-query';
-import { api } from '../../services/api';
+import { apiService } from '../../services/api';
 import { DashboardStats } from '../../types/admin';
 
 export const Dashboard: React.FC = () => {
   const { data: stats, isLoading } = useQuery<DashboardStats>(
     'dashboardStats',
-    () => api.get('/admin/stats').then(res => res.data)
+    async () => {
+      const response = await apiService.getDashboardStats();
+      return response.data;
+    }
   );
 
   if (isLoading) return <div>Loading...</div>;
@@ -25,33 +28,32 @@ export const Dashboard: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title="Total Tickets"
-            value={stats?.totalTickets || 0}
+            value={stats?.totalTickets ?? 0}
             icon={<TicketIcon />}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title="Total Bookings"
-            value={stats?.totalBookings || 0}
+            value={stats?.totalBookings ?? 0}
             icon={<BookingIcon />}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title="Revenue"
-            value={`$${stats?.totalRevenue || 0}`}
+            value={`$${stats?.totalRevenue ?? 0}`}
             icon={<RevenueIcon />}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title="Active Events"
-            value={stats?.activeEvents || 0}
+            value={stats?.activeEvents ?? 0}
             icon={<EventIcon />}
           />
         </Grid>
       </Grid>
-      {/* Add more dashboard components here */}
     </Container>
   );
 };
