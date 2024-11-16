@@ -1,0 +1,17 @@
+# Ignore artifacts:
+build
+coverage
+dist
+
+# Ignore all HTML files:
+*.html
+
+# Ignore node_modules
+node_modules
+
+# Ignore public folder
+public
+
+# Other common ignores
+.git
+.cache
