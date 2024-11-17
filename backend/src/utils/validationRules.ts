@@ -16,3 +16,17 @@ export const commonValidationRules = {
 
   // Add more common validation rules here
 };
+
+export const authValidation = {
+  register: [
+    body('name').trim().notEmpty().withMessage('Name is required'),
+    body('email').isEmail().withMessage('Please include a valid email'),
+    body('password')
+      .isLength({ min: 6 })
+      .withMessage('Password must be at least 6 characters long')
+  ],
+  login: [
+    body('email').isEmail().withMessage('Please include a valid email'),
+    body('password').exists().withMessage('Password is required')
+  ]
+};
