@@ -20,13 +20,23 @@ export const commonValidationRules = {
 export const authValidation = {
   register: [
     body('name').trim().notEmpty().withMessage('Name is required'),
-    body('email').isEmail().withMessage('Please include a valid email'),
+    body('email').isEmail().withMessage('Please provide a valid email'),
     body('password')
       .isLength({ min: 6 })
       .withMessage('Password must be at least 6 characters long')
   ],
+
   login: [
-    body('email').isEmail().withMessage('Please include a valid email'),
-    body('password').exists().withMessage('Password is required')
+    body('email').isEmail().withMessage('Please provide a valid email'),
+    body('password').notEmpty().withMessage('Password is required')
+  ],
+
+  updatePassword: [
+    body('currentPassword')
+      .notEmpty()
+      .withMessage('Current password is required'),
+    body('newPassword')
+      .isLength({ min: 6 })
+      .withMessage('New password must be at least 6 characters long')
   ]
 };

@@ -1,25 +1,42 @@
 // src/routes/auth.routes.ts
 import express from 'express';
 import { protect, restrictTo } from '../middlewares/auth.middleware';
-import { register, login, getMe } from '../controllers/auth.controller';
+import {
+  register,
+  login,
+  getMe,
+  refreshToken,
+  updatePassword,
+  logout
+} from '../controllers/auth.controller';
 import { validateRequest } from '../middlewares/validate.middleware';
 import { authValidation } from '../utils/validationRules';
 
 const router = express.Router();
 
+// Public routes
 router.post('/register', authValidation.register, validateRequest, register);
+
 router.post('/login', authValidation.login, validateRequest, login);
-router.get('/me', protect, getMe);
 
-// Protected routes (placeholder)
-router.use(protect); // All routes below this will require authentication
+router.post('/refresh-token', refreshToken);
 
-router.post('/logout', (req, res) => {
-  res.status(501).json({ message: 'Not implemented yet' });
-});
+// Protected routes
+router.use(protect); // Middleware to protect all routes below
 
-// Admin only routes (placeholder)
-router.use(restrictTo('admin')); // All routes below this will require admin role
+router.get('/me', getMe);
+
+router.post(
+  '/update-password',
+  authValidation.updatePassword,
+  validateRequest,
+  updatePassword
+);
+
+router.post('/logout', logout);
+
+// Admin only routes
+router.use(restrictTo('admin')); // Middleware to restrict to admin role
 
 router.get('/users', (req, res) => {
   res.status(501).json({ message: 'Not implemented yet' });

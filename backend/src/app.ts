@@ -2,6 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import { connectDB } from './config/database';
 import { logger, morganStream } from './config/logger';
 import { errorHandler } from './middlewares/error.middleware';
@@ -26,6 +27,7 @@ app.use(
   })
 );
 app.use(helmet());
+app.use(cookieParser());
 
 // Logging middleware
 app.use(
